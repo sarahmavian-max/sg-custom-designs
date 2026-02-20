@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SG Custom Designs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --beige: #f5f1ea;
+  --light-beige: #faf7f2;
+  --accent: #c8b8a6;
+  --text-dark: #3e3e3e;
+  --white: #ffffff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', sans-serif; background-color: var(--light-beige); color: var(--text-dark); }
+header { background: var(--white); padding:20px 8%; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; }
+.logo img { height:70px; }
+nav a { margin-left:25px; text-decoration:none; color:var(--text-dark); }
+section { padding:80px 8%; }
+.section-title { font-family:'Playfair Display', serif; font-size:32px; margin-bottom:40px; text-align:center; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; text-align:center; }
+.card { background:var(--white); padding:30px; border-radius:6px; box-shadow:0 5px 20px rgba(0,0,0,0.04); cursor:pointer; transition: transform 0.2s; }
+.card:hover { transform: translateY(-5px); }
+.card.selected { border:2px solid var(--accent); }
+form input, form textarea { width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius:4px; }
+.button { padding:14px 30px; background:var(--accent); color:white; border:none; border-radius:4px; cursor:pointer; text-decoration:none; display:inline-block; }
+footer { background:var(--white); text-align:center; padding:30px; font-size:14px; border-top:1px solid #eee; }
+.summary { margin-top:20px; font-size:16px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><img src="logo.svg" alt="SG Custom Designs"></div>
+  <nav>
+    <a href="#services">Services</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header><section class="hero">
+  <h1>Soft Scandinavian Cabinetry Design</h1>
+  <p>Functional layouts designed with warmth, simplicity and precision.</p>
+  <a href="#floorplans" class="button">Request a Design</a>
+</section><section id="floorplans">
+  <h2 class="section-title">Choose Your Room</h2>
+  <div class="grid">
+    <div class="card" onclick="selectRoom('Kitchen')">Kitchen</div>
+    <div class="card" onclick="selectRoom('Main Bedroom')">Main Bedroom</div>
+    <div class="card" onclick="selectRoom('Bedroom 2')">Bedroom 2</div>
+    <div class="card" onclick="selectRoom('Main Vanity')">Main Vanity</div>
+    <div class="card" onclick="selectRoom('Vanity 2')">Vanity 2</div>
+  </div>
+</section><section id="cabinets">
+  <h2 class="section-title">Select Cabinets</h2>
+  <div class="grid" id="cabinetGrid"></div>
+  <div class="summary" id="selectionSummary">Selected: None</div>
+</section><section id="contact">
+  <h2 class="section-title">Enquiry</h2>
+  <form action="https://formsubmit.co/sgcustomdesignsjbay@gmail.com" method="POST">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="text" name="name" placeholder="Full Name" required>
+    <input type="email" name="email" placeholder="Email Address" required>
+    <input type="hidden" name="selectedRoom" id="selectedRoomField">
+    <input type="hidden" name="selectedCabinets" id="selectedCabinetsField">
+    <textarea name="message" rows="5" placeholder="Tell us about your project" required></textarea>
+    <button type="submit" class="button">Send Enquiry</button>
+  </form>
+</section><footer>
+  © 2026 SG Custom Designs | Intentional Cabinetry Layouts
+</footer><script>
+const cabinetOptions = {
+  'Kitchen':['Wall Cupboard','Island Drawer','Pantry Cabinet'],
+  'Main Bedroom':['Wardrobe','Nightstand','Dresser'],
+  'Bedroom 2':['Wardrobe','Desk Cabinet','Shelf Unit'],
+  'Main Vanity':['Vanity Cupboard','Mirror Cabinet'],
+  'Vanity 2':['Vanity Cupboard','Shelf Unit']
+};
+let selectedRoom = '';
+let selectedCabinets = [];
+
+function selectRoom(room){
+  selectedRoom = room;
+  selectedCabinets = [];
+  document.getElementById('selectedRoomField').value = room;
+  document.getElementById('selectedCabinetsField').value = '';
+  document.getElementById('selectionSummary').innerText = 'Selected: ' + room;
+
+  const grid = document.getElementById('cabinetGrid');
+  grid.innerHTML = '';
+  cabinetOptions[room].forEach(cab => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerText = cab;
+    div.onclick = () => {
+      if(selectedCabinets.includes(cab)){
+        selectedCabinets = selectedCabinets.filter(c=>c!==cab);
+        div.classList.remove('selected');
+      }else{
+        selectedCabinets.push(cab);
+        div.classList.add('selected');
+      }
+      document.getElementById('selectedCabinetsField').value = selectedCabinets.join(', ');
+      document.getElementById('selectionSummary').innerText = 'Selected: ' + room + ' | ' + selectedCabinets.join(', ');
+    };
+    grid.appendChild(div);
+  });
+}
+</script></body>
+</html>
